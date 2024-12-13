@@ -1,4 +1,4 @@
-package hiber.service;
+package web.service;
 
 public class UserServiceImp {
 }

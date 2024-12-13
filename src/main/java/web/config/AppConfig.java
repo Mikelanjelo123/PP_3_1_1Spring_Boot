@@ -1,4 +1,4 @@
-package hiber.config;
+package web.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,9 +18,8 @@ import java.util.Properties;
 @Configuration
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
-@ComponentScan(value = "hiber")
+@ComponentScan("web")
 public class AppConfig {
-
     @Autowired
     private Environment environment;
 
@@ -38,14 +37,13 @@ public class AppConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
         entityManager.setDataSource(getDataSource());
-        entityManager.setPackagesToScan("hiber.model");
+        entityManager.setPackagesToScan("web.model");
 
         Properties jpaProperties = new Properties();
         jpaProperties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
         jpaProperties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
         jpaProperties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
         entityManager.setJpaProperties(jpaProperties);
-
         return entityManager;
     }
 
