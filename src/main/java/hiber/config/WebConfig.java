@@ -1,4 +1,4 @@
-package web.config;
+package hiber.config;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
