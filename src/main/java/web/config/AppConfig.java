@@ -46,6 +46,9 @@ public class AppConfig {
         jpaProperties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
         jpaProperties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
         jpaProperties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
+        jpaProperties.put("hibernate.connection.charSet", "UTF-8");
+        jpaProperties.put("hibernate.jdbc.charSet", "UTF-8");
+        jpaProperties.put("hibernate.connection.useUnicode","true");
         entityManager.setJpaProperties(jpaProperties);
         return entityManager;
     }
