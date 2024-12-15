@@ -7,7 +7,11 @@ import java.util.List;
 public interface UserDao {
     void add(User user);
 
-    List<User> listUsers();
+    void update(User user);
 
-     User getUserByCar(int serial, String model);
+    void delete(int id);
+
+    List<User> findAll();
+
+    User findById(int id);
 }
