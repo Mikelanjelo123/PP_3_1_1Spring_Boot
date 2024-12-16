@@ -1,5 +1,7 @@
 package web.model;
+
 import javax.persistence.*;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "users")
@@ -18,12 +20,19 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+    }
+
+    public static boolean isValidValue(String value) {
+        String regex = "^[A-ZА-ЯЁ][a-zа-яё]*(?:[- ][A-ZА-ЯЁ][a-zа-яё]*)*$";
+
+        return Pattern.matches(regex, value);
     }
 
     public int getId() {
@@ -35,7 +44,11 @@ public class User {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        if (isValidValue(firstName)) {
+            this.firstName = firstName;
+        } else {
+            throw new IllegalArgumentException("Некорректный ввод Имени");
+        }
     }
 
     public String getLastName() {
@@ -43,7 +56,11 @@ public class User {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        if (isValidValue(lastName)) {
+            this.lastName = lastName;
+        } else {
+            throw new IllegalArgumentException("Некорректный ввод Фамилии");
+        }
     }
 
     public String getEmail() {
@@ -62,5 +79,21 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (!(o instanceof User user)) return false;
+
+        return id == user.id && firstName.equals(user.firstName) && lastName.equals(user.lastName) && email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
+        result = 31 * result + email.hashCode();
+        return result;
     }
 }

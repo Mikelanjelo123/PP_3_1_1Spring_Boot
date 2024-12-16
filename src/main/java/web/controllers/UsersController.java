@@ -11,31 +11,39 @@ import web.service.UserService;
 @Controller
 public class UsersController {
     @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    private UsersController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping(value = "/")
     public String listUsers(ModelMap model) {
         model.addAttribute("users", userService.findAll());
         return "user-list";
     }
+
     @GetMapping(value = "/add")
     public String addUserForm(ModelMap model) {
         model.addAttribute("user", new User());
         return "user-add";
     }
+
     @PostMapping(value = "/add")
     public String addUser(@ModelAttribute("user") User user) {
         userService.add(user);
         return "redirect:/";
     }
+
     @GetMapping(value = "/edit")
     public String editUserForm(@RequestParam("id") int id, ModelMap model) {
-       User user = userService.findById(id);
-       model.addAttribute("user", user);
+        User user = userService.findById(id);
+        model.addAttribute("user", user);
         return "user-edit";
     }
+
     @PostMapping(value = "/edit")
-    public String editUser(@RequestParam("id") int id, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email")String email, Model model ) {
+    public String editUser(@RequestParam("id") int id, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email") String email, Model model) {
         User user = userService.findById(id);
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -43,10 +51,11 @@ public class UsersController {
         userService.update(user);
         return "redirect:/";
     }
+
     @GetMapping("/delete")
     public String deleteUser(@RequestParam("id") int id, ModelMap model) {
         userService.delete(id);
         model.addAttribute("users", userService.findAll());
-        return "user-list";
+        return "redirect:/";
     }
 }
