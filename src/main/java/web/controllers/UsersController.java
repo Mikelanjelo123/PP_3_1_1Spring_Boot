@@ -17,33 +17,33 @@ public class UsersController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/")
+    @GetMapping("/")
     public String listUsers(ModelMap model) {
         model.addAttribute("users", userService.findAll());
         return "user-list";
     }
 
-    @GetMapping(value = "/add")
+    @GetMapping("/add")
     public String addUserForm(ModelMap model) {
         model.addAttribute("user", new User());
         return "user-add";
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping("/add")
     public String addUser(@ModelAttribute("user") User user) {
         userService.add(user);
         return "redirect:/";
     }
 
-    @GetMapping(value = "/edit")
+    @GetMapping("/edit")
     public String editUserForm(@RequestParam("id") int id, ModelMap model) {
         User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user-edit";
     }
 
-    @PostMapping(value = "/edit")
-    public String editUser(@RequestParam("id") int id, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email") String email, Model model) {
+    @PostMapping("/edit")
+    public String editUser(@RequestParam("id") int id, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email") String email) {
         User user = userService.findById(id);
         user.setFirstName(firstName);
         user.setLastName(lastName);
