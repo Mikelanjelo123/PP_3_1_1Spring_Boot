@@ -1,7 +1,10 @@
 package web.model;
 
 import javax.persistence.*;
-import java.util.regex.Pattern;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+
 
 @Entity
 @Table(name = "users")
@@ -10,13 +13,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(name = "name")
+    @Pattern(regexp = "^[А-ЯA-Z][а-яa-z]+$", message = "неккоректный ввод Имени")
+    @NotEmpty(message = "Имя не может быть пустым")
+    @Column(name = "first_Name")
     private String firstName;
-
+    @Pattern(regexp = "^[А-ЯA-Z][а-яa-z]+$", message = "неккоректный ввод Фамилии")
+    @NotEmpty(message = "Фамилия не может быть пустым")
     @Column(name = "last_name")
     private String lastName;
-
+    @NotEmpty(message = "Email не может быть пустым")
+    @Email(message = "некорректный Email")
     @Column(name = "email")
     private String email;
 
@@ -29,12 +35,6 @@ public class User {
         this.email = email;
     }
 
-    public static boolean isValidValue(String value) {
-        String regex = "^[A-ZА-ЯЁ][a-zа-яё]*(?:[- ][A-ZА-ЯЁ][a-zа-яё]*)*$";
-
-        return Pattern.matches(regex, value);
-    }
-
     public int getId() {
         return id;
     }
@@ -44,11 +44,7 @@ public class User {
     }
 
     public void setFirstName(String firstName) {
-        if (isValidValue(firstName)) {
-            this.firstName = firstName;
-        } else {
-            throw new IllegalArgumentException("Некорректный ввод Имени");
-        }
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -56,11 +52,7 @@ public class User {
     }
 
     public void setLastName(String lastName) {
-        if (isValidValue(lastName)) {
-            this.lastName = lastName;
-        } else {
-            throw new IllegalArgumentException("Некорректный ввод Фамилии");
-        }
+        this.lastName = lastName;
     }
 
     public String getEmail() {

@@ -1,12 +1,16 @@
 package web.controllers;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web.model.User;
 import web.service.UserService;
+
+import javax.validation.Valid;
 
 @Controller
 public class UsersController {
@@ -30,7 +34,10 @@ public class UsersController {
     }
 
     @PostMapping("/add")
-    public String addUser(@ModelAttribute("user") User user) {
+    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "user-add";
+        }
         userService.add(user);
         return "redirect:/";
     }
@@ -43,19 +50,21 @@ public class UsersController {
     }
 
     @PostMapping("/edit")
-    public String editUser(@RequestParam("id") int id, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email") String email) {
-        User user = userService.findById(id);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        userService.update(user);
+    public String editUser(@RequestParam("id") int id, @ModelAttribute("user") @Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "user-edit";
+        }
+        User existingUser = userService.findById(id);
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setEmail(user.getEmail());
+        userService.update(existingUser);
         return "redirect:/";
     }
 
     @GetMapping("/delete")
-    public String deleteUser(@RequestParam("id") int id, ModelMap model) {
+    public String deleteUser(@RequestParam("id") int id) {
         userService.delete(id);
-        model.addAttribute("users", userService.findAll());
         return "redirect:/";
     }
 }
