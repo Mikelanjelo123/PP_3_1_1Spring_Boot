@@ -1,10 +1,12 @@
 package web.dao;
 
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import web.model.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.*;
 import java.util.List;
 
 

@@ -1,6 +1,8 @@
 package web.model;
 
-import javax.persistence.*;
+
+import jakarta.persistence.*;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
